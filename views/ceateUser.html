@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+     li{ list-style-type: none; display: flex; width: 300px;}
+     span:nth-child(1){  width: 50px;  }
+     span:nth-child(2){  width: 150px;  }
+  </style>
+</head>
+<body>
+    <form action="" id="form">
+        <input type="text"  id="name" placeholder="name input" autocomplete="off">
+        <input type="number" id="age" placeholder="age input" autocomplete="off">
+        <input type="button" id="createUserBtn" value="회원가입">
+        <input type="reset" id="resetUser" value="취소">
+    </form>
+    <ul class="usersList">
+      <!-- <li> id, name, age </li> -->
+    </ul>
+
+    <!-- 
+        // id 값과 같은 변수가 선언되어 있지 않다면 다음과 같이 직접 데이터를 정의 
+        const user = {
+                name :  name.value,  
+                age :  age.value,  
+          }
+
+        // 변수가 정의 되어 있다면 : 추천
+        const nameValue = document.querySelector('#name').value; 
+        const ageValue = document.querySelector('#age').value; 
+        const user = {
+                name :  namValue,  
+                age :  ageValue,  
+        }
+
+        // 3번사용 : js 키값과 밸류가 같으면 밸류를 생략할 수 있다. 
+        const name = document.querySelector('#name').value; 
+        const age = document.querySelector('#age').value; 
+        const user = {
+                name,  
+                age,  
+        }
+     -->
+    <script>
+      const form = document.querySelector('#form');
+      form.addEventListener('submit', (event)=>{
+            event.preventDefault();
+      })
+
+  
+      const createUserBtn = document.querySelector('#createUserBtn');
+      createUserBtn.addEventListener('click', ()=>{
+          const API_URL = `http://localhost:3000/users`;
+
+          const name = document.querySelector('#name').value; 
+          const age = document.querySelector('#age').value; 
+          
+          const user = {
+            name,  
+            age,  
+          }
+           
+          fetch(API_URL, {
+            method : 'POST',
+            headers : { 'Content-Type' : 'application/json'},
+            body : JSON.stringify(user)
+          })
+          .then( users => users.json())
+          .then( users => {
+              console.log( users );
+              getUsersList(users);
+          });
+      })
+
+      const idNum = document.querySelector('#idNum');
+      const detailUser = document.querySelector('#detailUser');
+      
+       
+      const usersList = document.querySelector('.usersList');
+      
+      // fetch(get, post, delete, put).then(프로미스상태).then(조작할 수 있는데이터)
+      const API_URL = 'http://localhost:3000/users';
+      fetch(API_URL)
+      .then(users => users.json())
+      .then(users=>{
+           console.log(users);
+           getUsersList(users);
+      });
+
+      const getUsersListOld = (users)=>{
+           let str = '';
+           users.forEach(user=>{
+              str += `<li><span>${user.id}</span><span>${user.name}</span><span>${user.age}</span></li>` 
+           })
+           
+           usersList.innerHTML = str;
+      }
+      const getUsersList  = (users)=>{
+            usersList.innerHTML = ""; // 내용을 지우고 다시 뿌리기 
+
+            users.forEach( user => {
+              const li = document.createElement('li'); // li 태그 생성 
+              const idSpan = document.createElement('span'); // span 태그 생성 
+              const nameSpan = document.createElement('span'); // span 태그 생성 
+              const ageSpan = document.createElement('span'); // span 태그 생성 
+
+              idSpan.innerHTML = user.id; 
+              nameSpan.innerHTML = user.name; 
+              ageSpan.innerHTML = user.age; 
+              
+              li.appendChild(idSpan);
+              li.appendChild(nameSpan);
+              li.appendChild(ageSpan);
+              usersList.appendChild(li);  //  화면에 뿌리기
+           })
+      }
+    </script>
+</body>
+</html>

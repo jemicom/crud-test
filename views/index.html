@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    li {
+      list-style-type: none;
+      display: flex;
+      width: 300px;
+    }
+
+    span:nth-child(1) {
+      width: 50px;
+    }
+
+    span:nth-child(2) {
+      width: 150px;
+    }
+  </style>
+</head>
+
+<body>
+  <form action="" id="form1">
+    <input type="text" id="idNum" placeholder="id를 숫자로 입력하세요.">
+    <input type="button" id="detailUser" value="자세히보기">
+    <input type="button" id="deleteUser" value="삭제">
+    <input type="button" id="updateUser" value="수정">
+  </form>
+  <form action="" id="form2">
+    <input type="text" id="name" placeholder="name input" autocomplete="off">
+    <input type="number" id="age" placeholder="age input" autocomplete="off">
+    <input type="button" id="createUserBtn" value="회원가입">
+    <input type="reset" id="resetUser" value="취소">
+  </form>
+  <ul class="usersList">
+    <!-- <li> id, name, age </li> -->
+  </ul>
+
+  <div class="log">
+    <!-- user를 뿌려보세요. -->
+  </div>
+
+  <script src="/request.js"></script>
+  <script>
+    const form1 = document.querySelector('#form1');
+    const form2 = document.querySelector('#form2');
+
+    form1.addEventListener('submit', (event) => {
+      event.preventDefault();
+    })
+    form2.addEventListener('submit', (event) => {
+      event.preventDefault();
+    })
+
+    const idNum = document.querySelector('#idNum');
+
+    const updateUser = document.querySelector('#updateUser');
+    updateUser.addEventListener('click', () => {
+      const idNumValue = idNum.value;
+      const API_URL = `http://localhost:3000/users/${idNumValue}`;
+
+      const name = document.querySelector('#name').value;
+      const age = document.querySelector('#age').value;
+
+      const user = {
+        name,
+        age,
+      }
+      request.put(API_URL, user)
+        .then(users => users.json())
+        .then(users => {
+          console.log(users);
+          getUsersList(users);
+        });
+    })
+
+    const createUserBtn = document.querySelector('#createUserBtn');
+    createUserBtn.addEventListener('click', () => {
+      const API_URL = `http://localhost:3000/users`;
+
+      const name = document.querySelector('#name').value;
+      const age = document.querySelector('#age').value;
+
+      const user = {
+        name,
+        age,
+      }
+
+      request.post(API_URL, user)
+        .then(users => users.json())
+        .then(users => {
+          console.log(users);
+          getUsersList(users);
+        });
+    })
+    const detailUser = document.querySelector('#detailUser');
+    detailUser.addEventListener('click', () => {
+      const idNumValue = idNum.value;
+      const API_URL = `http://localhost:3000/users/${idNumValue}`;
+      // http://localhost:3000/users/1
+      // http://localhost:3000/users/3
+
+      request.get(API_URL)
+        .then(user => user.json())
+        .then(user => {
+          console.log(user);
+          const log = document.querySelector('.log');
+          const str = user.id + ' : ' + user.name + " : " + user.age;
+          log.innerHTML = str;
+        });
+    })
+
+    const deleteUser = document.querySelector('#deleteUser');
+    deleteUser.addEventListener('click', () => {
+      const idNumValue = idNum.value;
+      const API_URL = `http://localhost:3000/users/${idNumValue}`;
+      // http://localhost:3000/users/1
+      // http://localhost:3000/users/3
+
+      // todoList 처럼 하면 목록 옆에 삭제 버튼을 만들고 
+      // 삭제 이벤트 핸들러도 추가해서 fatch 를 호출 
+      request.delete(API_URL)
+        .then(users => users.json())
+        .then(users => {
+          console.log(users);
+          getUsersList(users);
+        });
+    })
+
+    const usersList = document.querySelector('.usersList');
+
+    // fetch(get, post, delete, put).then(프로미스상태).then(조작할 수 있는데이터)
+    const API_URL = 'http://localhost:3000/users';
+    // fetch(API_URL)
+    request.get(API_URL)
+      .then(users => users.json())
+      .then(users => {
+        console.log(users);
+        getUsersList(users);
+      });
+
+    const getUsersListOld = (users) => {
+      let str = '';
+      users.forEach(user => {
+        str += `<li><span>${user.id}</span><span>${user.name}</span><span>${user.age}</span></li>`
+      })
+
+      usersList.innerHTML = str;
+    }
+    const getUsersList = (users) => {
+      usersList.innerHTML = ""; // 내용을 지우고 다시 뿌리기 
+
+      users.forEach(user => {
+        const li = document.createElement('li'); // li 태그 생성 
+        const idSpan = document.createElement('span'); // span 태그 생성 
+        const nameSpan = document.createElement('span'); // span 태그 생성 
+        const ageSpan = document.createElement('span'); // span 태그 생성 
+
+        idSpan.innerHTML = user.id;
+        nameSpan.innerHTML = user.name;
+        ageSpan.innerHTML = user.age;
+
+        li.appendChild(idSpan);
+        li.appendChild(nameSpan);
+        li.appendChild(ageSpan);
+        usersList.appendChild(li);  //  화면에 뿌리기
+      })
+    }
+  </script>
+</body>
+
+</html>
+
+<!-- 
+   포트폴리오 : openAPi 다룰 줄 아는 내용이 들어 있는 것 
+   openAPi : 관심사 openAPI  찾아보기 : 키값 발급 => 화면UI 
+ -->
