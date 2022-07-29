@@ -1,9 +1,10 @@
 const express = require('express');
 const router  = require( './routes/users.js');
 const dotenv  = require( 'dotenv');
-dotenv.config();
+dotenv.config({path:'.env'});
 // 공통 모듈 방식
 const  path =require('path'); 
+console.log( process.env.PORT)
 
 
 const cors  =require('cors');
@@ -13,7 +14,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(cors())
 
-app.set(PORT, 3000);
+ 
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
 // form 데이터를 인코딩해서  전달함 
@@ -21,8 +22,8 @@ app.use( express.static(path.join(__dirname, 'views')));
 app.use( express.static(path.join(__dirname, 'controls'))); 
 // 뷰단을 자동으로 사용할 수 있도록 설정 
 // console.log( __dirname );
-app.listen( app.get(PORT), ()=>{
-    console.log( `server start ${app.get(PORT)}`)
+app.listen(PORT, ()=>{
+    console.log( `server start ${PORT}`)
 })
  
 // 모든 처리를  router가 할 수 있도록 넘김 

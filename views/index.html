@@ -61,7 +61,7 @@
     const updateUser = document.querySelector('#updateUser');
     updateUser.addEventListener('click', () => {
       const idNumValue = idNum.value;
-      const API_URL = `http://localhost:3000/users/${idNumValue}`;
+      const API_URL = `http://localhost:3500/users/${idNumValue}`;
 
       const name = document.querySelector('#name').value;
       const age = document.querySelector('#age').value;
@@ -80,7 +80,7 @@
 
     const createUserBtn = document.querySelector('#createUserBtn');
     createUserBtn.addEventListener('click', () => {
-      const API_URL = `http://localhost:3000/users`;
+      const API_URL = `http://localhost:3500/users`;
 
       const name = document.querySelector('#name').value;
       const age = document.querySelector('#age').value;
@@ -100,7 +100,7 @@
     const detailUser = document.querySelector('#detailUser');
     detailUser.addEventListener('click', () => {
       const idNumValue = idNum.value;
-      const API_URL = `http://localhost:3000/users/${idNumValue}`;
+      const API_URL = `http://localhost:3500/users/${idNumValue}`;
       // http://localhost:3000/users/1
       // http://localhost:3000/users/3
 
@@ -117,7 +117,7 @@
     const deleteUser = document.querySelector('#deleteUser');
     deleteUser.addEventListener('click', () => {
       const idNumValue = idNum.value;
-      const API_URL = `http://localhost:3000/users/${idNumValue}`;
+      const API_URL = `http://localhost:3500/users/${idNumValue}`;
       // http://localhost:3000/users/1
       // http://localhost:3000/users/3
 
@@ -134,7 +134,7 @@
     const usersList = document.querySelector('.usersList');
 
     // fetch(get, post, delete, put).then(프로미스상태).then(조작할 수 있는데이터)
-    const API_URL = 'http://localhost:3000/users';
+    const API_URL = 'http://localhost:3500/users';
     // fetch(API_URL)
     request.get(API_URL)
       .then(users => users.json())
